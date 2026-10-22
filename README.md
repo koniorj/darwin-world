@@ -1,58 +1,52 @@
 # Darwin World
 
-Symulacja ewolucji zwierząt na mapie, napisana w Javie z interfejsem w JavaFX. Zwierzaki chodzą po planszy, szukają trawy, rozmnażają się i przekazują dalej swoje geny (z drobnymi mutacjami). Można patrzeć, jak populacja się zmienia z dnia na dzień, i sprawdzać, które strategie przeżywają.
+Simulation of animal evolution on a map, built with Java and JavaFX user interface. Animals move across the board, forage for grass, reproduce, and pass down their genes (with small mutations). You can observe population dynamics over time and analyze which evolutionary strategies survive.
 
-Projekt wykonany na przedmiocie **Programowanie obiektowe** (AGH, Informatyka).
+Project developed for the Object-Oriented Programming course (AGH University of Technology, Computer Science).
 
-## Autorzy
-
+## Authors
 - Paweł Pochwalski
 - Justyna Konior
 
-## Film
-
-Krótki film pokazujący, jak działa aplikacja:
-
-
+## Video Presentation
+Short video demonstrating the application in action:
 
 https://github.com/user-attachments/assets/303ab0a5-631a-4d8a-bb95-317e23c03dc4
 
 
 
-## Jak działa symulacja
+# How the Simulation Works
+The world consists of a cylindrical map: the left and right edges wrap around, while the top and bottom form boundaries (walls). The central strip of the map represents a jungle where grass grows more frequently; the remaining areas are steppes.
 
-Świat to plansza w kształcie walca: lewa i prawa krawędź się łączą, góra i dół są ścianami. Środkowy pas mapy to dżungla, gdzie trawa rośnie częściej, reszta to stepy.
+Each simulation day follows this sequence:
+1. Animals lose energy (daily cost of living).
+2. Animals move according to their genome.
+3. Animals standing on grass consume it and regain energy.
+4. Animals with sufficient energy reproduce. The offspring receives a combination of the parents' genes, with a chance for random mutations.
+5. New grass spawns on the map.
+6. Dead animals are removed from the board, but their lifespans are included in the overall statistics.
 
-Każdy dzień wygląda mniej więcej tak:
+## Modes
+* **Normal:** Constant environmental conditions throughout the simulation.
+* **Seasonal:** Alternating summer and winter seasons. During winter, temperatures drop, increasing the daily energy cost of living for animals. Season duration, minimum temperature, and heat distribution radius are fully configurable.
 
-1. Zwierzęta tracą energię (dzienny koszt życia).
-2. Każde rusza się zgodnie ze swoim genomem.
-3. Zwierzęta stojące na trawie ją zjadają i odzyskują energię.
-4. Zwierzęta z odpowiednio dużą ilością energii się rozmnażają. Dziecko dostaje mieszankę genów rodziców, a część genów może zmutować.
-5. Na mapie wyrasta nowa trawa.
 
-Martwe zwierzaki znikają z planszy, ale ich długość życia zostaje wliczona do statystyk.
+## Features
+* Configure all simulation parameters (map size, initial count of animals and grass, energy values, reproduction costs, genome length, mutation ranges, and more).
+* Use ready-made presets (*Sterile*, *India*, *Postapo*).
+* Save and load configuration settings from `.txt` files.
+* Run multiple simulations simultaneously, each in its own window.
+* Pause and resume the simulation at any time.
+* Monitor real-time statistics: animal and grass counts, empty tiles, dominant genotype, average energy, average lifespan, and average number of children.
+* View dynamic line charts tracking statistics over time (including temperature in seasonal mode).
+* Click on an animal while paused to track its genome, energy, age, child count, descendant count, and consumed plants.
+* Export daily statistics to a CSV file.
 
-### Tryby
 
-- **Normalny**: stałe warunki przez cały czas.
-- **Sezonowy**: na zmianę lato i zima. Zimą spada temperatura, a zwierzęta muszą radzić sobie z większym kosztem życia. Długość pór roku, minimalną temperaturę i odległość, na jaką rozchodzi się ciepło, ustawia się w konfiguracji.
+## Getting Started
 
-## Co można w programie robić
-
-- ustawić wszystkie parametry symulacji (rozmiar mapy, liczba zwierząt i traw, energie, koszty rozmnażania, długość genomu, zakres mutacji i inne),
-- skorzystać z gotowych presetów: *Bezpłodni*, *Indie*, *Postapo*,
-- zapisywać i wczytywać konfigurację z pliku `.txt`,
-- uruchamiać kilka symulacji naraz, każda w osobnym oknie,
-- zatrzymywać i wznawiać symulację,
-- oglądać statystyki na bieżąco: liczba zwierząt i traw, puste pola, najpopularniejszy genotyp, średnia energia, średnia długość życia i średnia liczba dzieci,
-- przeglądać wykresy tych wartości w czasie (w trybie sezonowym także temperaturę),
-- po zatrzymaniu kliknąć w zwierzaka i śledzić jego genom, energię, wiek, liczbę dzieci, potomków i zjedzonych roślin,
-- zapisywać statystyki z każdego dnia do pliku CSV.
-
-## Uruchomienie
-
-Potrzebne jest **JDK 25** (Gradle w razie czego sam spróbuje je dobrać). Biblioteki, w tym JavaFX i OpenCSV, pobierają się automatycznie.
+### Prerequisites
+JDK 25 is required (Gradle will attempt to fetch it automatically if missing). Dependencies, including JavaFX and OpenCSV, are downloaded automatically.
 
 ```bash
 git clone https://github.com/Calgune/Darwin-World.git
@@ -60,29 +54,29 @@ cd Darwin-World/oolab
 ./gradlew run
 ```
 
-Na Windowsie zamiast `./gradlew` używamy `gradlew.bat`.
+> **Note for Windows users:** Use `gradlew.bat` instead of `./gradlew`.
 
-Można też otworzyć projekt w IntelliJ IDEA, poczekać aż Gradle się zsynchronizuje i uruchomić zadanie `application > run`.
+Alternatively, open the project in IntelliJ IDEA, wait for Gradle sync to complete, and run the `application > run` task.
 
-Jeśli IntelliJ nie chce odpalić aplikacji z zielonej strzałki, w ustawieniach (`Build Tools > Gradle`) trzeba ustawić *Build and run using: Gradle*.
+*If IntelliJ fails to launch the application using the run button, go to `Settings > Build, Execution, Deployment > Build Tools > Gradle` and set **Build and run using** to **Gradle**.*
 
-## Technologie
 
-- Java 25
-- JavaFX 25
-- Gradle
-- OpenCSV
-- JUnit 5
+## Technologies
+* Java 25
+* JavaFX 25
+* Gradle
+* OpenCSV
+* JUnit 5
 
-## Struktura projektu
 
-Kod jest podzielony na pakiety w `agh.ics.oop`:
+## Project Structure
+The source code is organized into packages under `agh.ics.oop`:
 
-- `model` – zwierzęta, trawa, genomy, mapa i jej ustawienia,
-- `model.maps` – implementacje mapy,
-- `model.simulation` – silnik i logika symulacji (normalnej i sezonowej),
-- `model.observers` – obserwatorzy zmian na mapie i w statystykach,
-- `model.util` – klasy pomocnicze, m.in. zapis do CSV i obsługa plików konfiguracyjnych,
-- `presenter` – kontrolery widoków JavaFX.
+* `model` – Animals, grass, genomes, map logic, and configurations.
+* `model.maps` – Map implementations.
+* `model.simulation` – Core simulation engine and logic (normal and seasonal modes).
+* `model.observers` – Observers monitoring map and statistic updates.
+* `model.util` – Helper utilities (CSV export, configuration file handling, etc.).
+* `presenter` – JavaFX view controllers.
 
-Widoki są opisane w plikach FXML w `src/main/resources`.
+UI views are defined in FXML files located in `src/main/resources`.
